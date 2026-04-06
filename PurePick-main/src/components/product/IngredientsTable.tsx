@@ -44,7 +44,6 @@ const ingredientPurposes: Record<string, string> = {
     "sodium chloride": "Flavor Enhancer",
 };
 
-// ✅ E-number restrictions by country
 const eNumberRestrictions: Record<string, { countries: string[]; reason: string }> = {
     "e211": { countries: ["EU"], reason: "May cause hyperactivity in children" },
     "e102": { countries: ["EU", "Norway"], reason: "Tartrazine - linked to hyperactivity" },
@@ -55,7 +54,6 @@ const eNumberRestrictions: Record<string, { countries: string[]; reason: string 
     "e621": { countries: [], reason: "MSG - sensitivity in some individuals" },
 };
 
-// ✅ Health details per purpose
 const healthDetails: Record<string, { effects: string[]; interactions: string[]; tip: string }> = {
     "Sweetener": {
         effects: ["May spike blood sugar levels", "Can contribute to tooth decay", "Excess linked to obesity"],
@@ -171,16 +169,7 @@ export const IngredientsTable = ({ ingredients }: IngredientsTableProps) => {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
     const [copied, setCopied] = useState(false);
 
-    if (!ingredients.length) {
-        return (
-            <div className="flex justify-center items-center w-full h-[90vh]">
-                <Chip className="bg-yellow-500/20 text-yellow-500" size="lg">
-                    No ingredients data available
-                </Chip>
-            </div>
-        );
-    }
-
+    // ✅ Hooks MUST come before any conditional return
     const sortedIngredients = useMemo(() => [...ingredients].sort((a, b) => {
         const qa = processQuantity(a.quantity);
         const qb = processQuantity(b.quantity);
@@ -200,6 +189,17 @@ export const IngredientsTable = ({ ingredients }: IngredientsTableProps) => {
         const matchesFilter = filter === "All" || config.safety === filter;
         return matchesSearch && matchesFilter;
     }), [sortedIngredients, search, filter]);
+
+    // ✅ Early return AFTER all hooks
+    if (!ingredients.length) {
+        return (
+            <div className="flex justify-center items-center w-full h-[90vh]">
+                <Chip className="bg-yellow-500/20 text-yellow-500" size="lg">
+                    No ingredients data available
+                </Chip>
+            </div>
+        );
+    }
 
     // Stats
     const safeCount = sortedIngredients.filter(ing => getPurposeConfig(getPurpose(ing.name, ing.purpose)).safety === 'Safe').length;
