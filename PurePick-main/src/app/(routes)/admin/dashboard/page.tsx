@@ -324,7 +324,7 @@ const AdminDashboard = () => {
                                                         }}
                                                     />
                                                 </TableCell>
-                                                <TableCell>{product.userIdCopy?.email}</TableCell>
+                                                <TableCell>{typeof product.userIdCopy === "object" ? product.userIdCopy.email : ""}</TableCell>
                                                 <TableCell>{product.productDetails.productType}</TableCell>
                                                 <TableCell>
                                                     <div className="flex flex-col gap-1">
