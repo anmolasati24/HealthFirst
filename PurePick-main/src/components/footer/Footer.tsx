@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col gap-4 justify-between items-center">
                     <div className="flex gap-2 justify-center items-center mb-4 md:mb-0 cursor-pointer">
                         <Slack className="w-6 h-6" />
-                        <span className="font-bold text-xl">PurePick</span>
+                        <span className="font-bold text-xl">NutriLens</span>
                     </div>
                     <nav className="flex flex-wrap justify-center gap-4 text-gray-400">
                         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
                 <div className="mt-8 text-center text-sm text-gray-500">
-                    © {new Date().getFullYear()} PurePick. All rights reserved.
+                    © {new Date().getFullYear()} NutriLens. All rights reserved.
                 </div>
             </div>
         </footer>

@@ -41,7 +41,7 @@ STRICT RULES:
 - Include mix of Indian and international brands
 - Each alternative must be healthier than the scanned product
 - productType must be exactly: Food, Beverage, Bodycare, Inhale, or Other
-- foodMark must be exactly: veg, non-veg, vegan, or null
+- foodMark must be exactly: veg, non-veg, vegan, or null. IMPORTANT: In India, a green dot in a green square means "veg". A brown or red dot in a square means "non-veg". Prioritize these visual marks.
 - Extract complete 13-digit EAN barcode starting with 890 for Indian products
 - For ingredients: list ALL ingredients with E-numbers, purposes and health effects
 - For nutrition: extract EXACT values from the label

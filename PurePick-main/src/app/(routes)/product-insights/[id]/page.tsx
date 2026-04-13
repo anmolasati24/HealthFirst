@@ -209,7 +209,7 @@ const ProductInsightPage = ({ params }: { params: { id: string } }) => {
 
                         {userDetails && (
                             <div className="flex flex-col items-center w-full text-default-foreground">
-                                <h2 className="text-2xl font-bold mb-6">PurePick AI Chat</h2>
+                                <h2 className="text-2xl font-bold mb-6">NutriLens AI Chat</h2>
                                 <ProductChat
                                     productId={id}
                                     productInsights={productInsights}

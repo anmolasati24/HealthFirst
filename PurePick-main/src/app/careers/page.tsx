@@ -11,7 +11,7 @@ const openings = [
         department: "Engineering",
         location: "Remote",
         type: "Full-time",
-        description: "Build and scale PurePick's core platform. Work with Next.js, TypeScript, and AI integrations.",
+        description: "Build and scale NutriLens's core platform. Work with Next.js, TypeScript, and AI integrations.",
         tag: "bg-blue-500/20 text-blue-400"
     },
     {
@@ -76,7 +76,7 @@ export default function CareersPage() {
                         <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
                             Join the{' '}
                             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                                PurePick
+                                NutriLens
                             </span>{' '}
                             Mission
                         </h1>
@@ -139,7 +139,7 @@ export default function CareersPage() {
                                 </div>
                             </div>
                             <Link
-                                href={`mailto:asatianmol78@gmail.com?subject=Application for ${job.role} at PurePick`}
+                                href={`mailto:asatianmol78@gmail.com?subject=Application for ${job.role} at NutriLens`}
                                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
                             >
                                 Apply Now <ArrowRight className="w-4 h-4" />
@@ -157,7 +157,7 @@ export default function CareersPage() {
                         We're always looking for talented people. Send us your resume and we'll reach out when something opens up.
                     </p>
                     <Link
-                        href="mailto:asatianmol78@gmail.com?subject=General Application - PurePick"
+                        href="mailto:asatianmol78@gmail.com?subject=General Application - NutriLens"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold text-sm hover:opacity-90 transition-opacity"
                     >
                         Send Open Application <ArrowRight className="w-4 h-4" />

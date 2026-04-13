@@ -64,7 +64,7 @@ export const LoginForm = () => {
 
             <div className="w-[90vw] max-w-lg lg:w-1/2 mx-auto rounded-2xl p-4 md:p-8">
                 <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 mb-10 lg:hidden">
-                    Login to PurePick
+                    Login to NutriLens
                 </h2>
 
                 <form className="my-3 grid gap-2" onSubmit={handleSubmit}>

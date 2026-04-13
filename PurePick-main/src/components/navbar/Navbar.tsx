@@ -15,7 +15,7 @@ const App = () => {
         <NavbarBrand className="flex gap-1">
           <Link className="text-inherit flex gap-1" href="/">
             <Slack size={30} />
-            <p className="font-bold text-inherit text-xl">PurePick</p>
+            <p className="font-bold text-inherit text-xl">NutriLens</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>

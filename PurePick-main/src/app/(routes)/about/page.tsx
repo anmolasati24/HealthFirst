@@ -24,7 +24,7 @@ const AboutPage = () => {
                 </div>
                 <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
                     <motion.h1 className="text-4xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                        About PurePick
+                        About NutriLens
                     </motion.h1>
                     <motion.p className="text-lg md:text-2xl mb-8 text-gray-700 dark:text-gray-300">
                         Your AI-powered companion for making informed decisions about personal care products
@@ -38,7 +38,7 @@ const AboutPage = () => {
                     <div>
                         <h2 className="text-4xl font-bold mb-8">Our Vision</h2>
                         <p className="text-lg leading-relaxed mb-6">
-                            At PurePick, we envision a world where every individual can make confident decisions about their personal care products. We believe that understanding what goes into your products shouldn&apos;t require a degree in chemistry.
+                            At NutriLens, we envision a world where every individual can make confident decisions about their personal care products. We believe that understanding what goes into your products shouldn&apos;t require a degree in chemistry.
                         </p>
                         <p className="text-lg leading-relaxed">
                             Our AI-driven platform democratizes access to product information, making it accessible and understandable for everyone, regardless of their background in health sciences.
@@ -58,7 +58,7 @@ const AboutPage = () => {
 
             {/* How It Works Section */}
             <motion.div className="py-10 md:py-20 max-w-6xl mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16">How PurePick Works</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-16">How NutriLens Works</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     {[
                         {

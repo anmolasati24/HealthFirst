@@ -33,7 +33,7 @@ const blogPosts = [
         id: 3,
         url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8874683/",
         title: "How AI is Revolutionizing Food Safety and Transparency",
-        excerpt: "Artificial intelligence is changing how we understand what we eat. From ingredient analysis to nutritional scoring, here's how AI tools like PurePick are making food safer.",
+        excerpt: "Artificial intelligence is changing how we understand what we eat. From ingredient analysis to nutritional scoring, here's how AI tools like NutriLens are making food safer.",
         category: "Technology",
         readTime: "6 min read",
         date: "Feb 10, 2026",
@@ -125,7 +125,7 @@ export default function BlogPage() {
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-6">
                             <BookOpen className="w-4 h-4" />
-                            PurePick Blog
+                            NutriLens Blog
                         </span>
                         <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
                             Know what you{' '}

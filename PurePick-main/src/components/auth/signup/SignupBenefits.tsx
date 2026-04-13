@@ -6,7 +6,7 @@ export const SignupBenefits = () => {
         <div className="hidden lg:flex lg:w-1/2 flex-col justify-center gap-8 p-8">
             <div className="space-y-4">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    Create Your PurePick Account
+                    Create Your NutriLens Account
                 </h1>
                 <p className="text-lg text-neutral-600 dark:text-neutral-300">
                     Get instant AI-powered insights for all your product choices                    </p>

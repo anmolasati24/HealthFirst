@@ -222,108 +222,95 @@ const AlternativeCard = ({
     alt,
 }: {
     productInsights: ProductInsights;
-    alt: any; // alternatives have a different shape
+    alt: any;
 }) => (
-    <div className="space-y-4">
-        {/* Alt product info */}
-        <div className="p-4 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900/50">
-            <div className="flex justify-between items-start mb-3">
-                <div>
-                    <h3 className="font-semibold text-lg">{alt.name}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        alt.price_comparison === "Cheaper"
-                            ? "bg-green-500/20 text-green-500"
-                            : alt.price_comparison === "More expensive"
-                            ? "bg-red-500/20 text-red-500"
-                            : "bg-blue-500/20 text-blue-500"
-                    }`}>
-                        {alt.price_comparison}
-                    </span>
-                </div>
-                <div className="text-right">
-                    <div className="text-2xl font-bold text-indigo-500">{alt.rating}<span className="text-sm text-zinc-400">/10</span></div>
-                    <div className="text-xs text-zinc-400">Health Rating</div>
-                </div>
-            </div>
+    <div className="mb-4 relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111113] p-5 shadow-sm transition-all hover:shadow-md group">
+        {/* Subtle glow if winner */}
+        {alt.rating > productInsights.overall.rating && (
+            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-opacity group-hover:opacity-100 opacity-70" />
+        )}
 
-            {/* Rating comparison bars */}
-            <div className="space-y-2 mb-3">
-                <div>
-                    <div className="flex justify-between text-xs text-zinc-400 mb-1">
-                        <span>Health Rating</span>
-                        <span>{productInsights.overall.rating} → {alt.rating}</span>
-                    </div>
-                    <div className="flex gap-1 h-2">
-                        <div
-                            className="rounded-full bg-zinc-500"
-                            style={{ width: `${(productInsights.overall.rating / 10) * 100}%` }}
-                        />
-                        <div
-                            className="rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
-                            style={{ width: `${(alt.rating / 10) * 100}%` }}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div className="flex justify-between text-xs text-zinc-400 mb-1">
-                        <span>Eco Score</span>
-                        <span>{productInsights.eco_rating.rating} → {alt.eco_score}</span>
-                    </div>
-                    <div className="flex gap-1 h-2">
-                        <div
-                            className="rounded-full bg-zinc-500"
-                            style={{ width: `${(productInsights.eco_rating.rating / 10) * 100}%` }}
-                        />
-                        <div
-                            className="rounded-full bg-gradient-to-r from-green-500 to-emerald-500"
-                            style={{ width: `${(alt.eco_score / 10) * 100}%` }}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {/* Benefits */}
-            {alt.key_benefits?.length > 0 && (
-                <div className="mb-2">
-                    <p className="text-xs text-zinc-400 mb-1">Key Benefits</p>
-                    <div className="flex flex-wrap gap-1">
-                        {alt.key_benefits.map((b: string, i: number) => (
-                            <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400">
-                                {b}
+        <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+                <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                        <h3 className="line-clamp-2 text-base font-bold leading-snug text-zinc-900 dark:text-zinc-100 pr-4">
+                            {alt.name}
+                        </h3>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                            <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                                alt.price_comparison === "Cheaper"
+                                    ? "bg-emerald-500/15 text-emerald-500 border border-emerald-500/20"
+                                    : alt.price_comparison === "More expensive"
+                                    ? "bg-rose-500/15 text-rose-500 border border-rose-500/20"
+                                    : "bg-blue-500/15 text-blue-500 border border-blue-500/20"
+                            }`}>
+                                {alt.price_comparison}
                             </span>
-                        ))}
+                            {alt.rating > productInsights.overall.rating && (
+                                <span className="flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-500 border border-emerald-500/20">
+                                    <span>★</span> Healthier Pick
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    {/* Score */}
+                    <div className="flex flex-col items-end">
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-black tracking-tighter text-indigo-500 dark:text-indigo-400">{alt.rating}</span>
+                            <span className="text-sm font-medium text-zinc-400">/ 10</span>
+                        </div>
+                        <span className="mt-0.5 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                            Health Score
+                        </span>
                     </div>
                 </div>
-            )}
 
-            {/* Health advantages */}
-            {alt.health_advantages?.length > 0 && (
-                <div>
-                    <p className="text-xs text-zinc-400 mb-1">Health Advantages over {productInsights.productDetails.productName}</p>
-                    <ul className="space-y-1">
-                        {alt.health_advantages.map((a: string, i: number) => (
-                            <li key={i} className="text-xs flex items-start gap-1 text-green-400">
-                                <span>✓</span> {a}
-                            </li>
-                        ))}
-                    </ul>
+                <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+                    {/* Progress Bars */}
+                    <div className="flex flex-col justify-center space-y-5 rounded-xl bg-zinc-50/80 px-5 py-4 dark:bg-[#18181b]/80 border dark:border-zinc-800/50 border-zinc-100">
+                        <div>
+                            <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-zinc-500">
+                                <span>Health</span>
+                                <span>{productInsights.overall.rating} <span className="mx-1 text-zinc-300 dark:text-zinc-600">→</span> <span className="text-indigo-500">{alt.rating}</span></span>
+                            </div>
+                            <div className="flex h-1.5 w-full gap-1">
+                                <div className="h-full rounded-full bg-zinc-200 dark:bg-zinc-700/60 transition-all duration-1000" style={{ width: `${(productInsights.overall.rating / 10) * 100}%` }} />
+                                <div className="h-full rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.4)] transition-all duration-1000 delay-150" style={{ width: `${(alt.rating / 10) * 100}%` }} />
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-zinc-500">
+                                <span>Eco Impact</span>
+                                <span>{productInsights.eco_rating.rating} <span className="mx-1 text-zinc-300 dark:text-zinc-600">→</span> <span className="text-emerald-500">{alt.eco_score}</span></span>
+                            </div>
+                            <div className="flex h-1.5 w-full gap-1">
+                                <div className="h-full rounded-full bg-zinc-200 dark:bg-zinc-700/60 transition-all duration-1000" style={{ width: `${(productInsights.eco_rating.rating / 10) * 100}%` }} />
+                                <div className="h-full rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] transition-all duration-1000 delay-150" style={{ width: `${(alt.eco_score / 10) * 100}%` }} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Features list */}
+                    <div className="flex flex-col justify-center">
+                        {alt.health_advantages?.length > 0 && (
+                            <div>
+                                <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                                    Health Advantages
+                                </p>
+                                <ul className="space-y-2.5">
+                                    {alt.health_advantages.slice(0, 3).map((advantage: string, i: number) => (
+                                        <li key={i} className="flex items-start gap-2.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+                                            <span className="mt-0.5 text-[10px] text-emerald-500 rounded-full bg-emerald-500/10 p-0.5">✔</span> 
+                                            <span>{advantage}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            )}
-        </div>
-
-        {/* Verdict */}
-        <div className="p-3 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-500/10 dark:to-purple-500/10 border border-indigo-100 dark:border-indigo-500/20 text-center">
-            {alt.rating > productInsights.overall.rating ? (
-                <p className="text-green-400 font-semibold">
-                    ✅ <span className="text-white">{alt.name}</span> is a healthier choice
-                </p>
-            ) : alt.rating === productInsights.overall.rating ? (
-                <p className="text-blue-400 font-semibold">🤝 Similar health rating</p>
-            ) : (
-                <p className="text-yellow-400 font-semibold">
-                    ⚡ <span className="text-white">{productInsights.productDetails.productName}</span> is currently the healthier pick
-                </p>
-            )}
+            </div>
         </div>
     </div>
 );
@@ -334,12 +321,14 @@ const AlternativeCard = ({
 export const ComparisonModal = ({
     isOpen,
     onClose,
-    products,           // user's other scanned ProductInsight docs
+    products,           // user's scanned ProductInsight docs
     productInsights,    // current product
     selectedProductId,
     setSelectedProductId,
 }: ComparisonModalProps) => {
-    const selectedProduct = products.find(p => p._id === selectedProductId);
+    // Filter out the currently viewed product so users cannot compare a product with itself
+    const otherProducts = products.filter(p => p._id !== productInsights._id);
+    const selectedProduct = otherProducts.find(p => p._id === selectedProductId) || otherProducts[0];
     const alternatives = productInsights.alternatives || []; // already saved in the product
 
     return (
@@ -351,12 +340,12 @@ export const ComparisonModal = ({
                 base: "bg-gradient-to-b from-gray-50 to-white dark:from-zinc-900 dark:to-zinc-950 overflow-y-auto",
                 header: "border-b border-gray-200 dark:border-zinc-800",
                 body: "py-6",
-                closeButton: "hover:bg-gray-100 dark:hover:bg-white/5 active:bg-gray-200 dark:active:bg-white/10",
+                closeButton: "scale-110 right-6 top-6 z-[150] bg-[#6B63FF] hover:bg-indigo-600 text-white shadow-lg",
             }}
         >
             <ModalContent>
                 <ModalHeader className="flex flex-col gap-1">
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold text-[#6B63FF] dark:text-[#818CF8]">
                         Product Comparison
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-zinc-400">
@@ -422,15 +411,15 @@ export const ComparisonModal = ({
                             title={
                                 <div className="flex items-center gap-2">
                                     <span>My Scans</span>
-                                    {products.length > 0 && (
+                                    {otherProducts.length > 0 && (
                                         <Chip size="sm" variant="flat" color="primary">
-                                            {products.length}
+                                            {otherProducts.length}
                                         </Chip>
                                     )}
                                 </div>
                             }
                         >
-                            {products.length === 0 ? (
+                            {otherProducts.length === 0 ? (
                                 <div className="flex justify-center items-center p-8">
                                     <div className="text-center">
                                         <p className="text-lg font-semibold text-yellow-500 mb-2">No other products to compare</p>
@@ -450,7 +439,7 @@ export const ComparisonModal = ({
                                         }}
                                         onChange={(e) => setSelectedProductId(e.target.value)}
                                     >
-                                        {products.map((product) => (
+                                        {otherProducts.map((product) => (
                                             <SelectItem
                                                 className="text-default-foreground"
                                                 key={product._id}

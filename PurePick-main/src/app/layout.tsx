@@ -9,7 +9,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PurePick",
+  title: "NutriLens",
   description: "Emphasizes selecting pure and safe products"
 };
 

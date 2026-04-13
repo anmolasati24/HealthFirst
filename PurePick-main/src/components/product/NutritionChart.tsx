@@ -46,17 +46,29 @@ export const NutritionChart = ({ nutritionalValues }: NutritionChartProps) => {
     // If all are energy, show all
     const chartNutrition = pieNutrition.length > 0 ? pieNutrition : validNutrition;
 
+    const getNormalizedValue = (amount?: string, unit?: string): number => {
+        const val = processAmount(amount) || 0;
+        if (!unit) return val;
+        const lowerUnit = unit.toLowerCase().trim();
+        if (lowerUnit === 'mg') return val / 1000;
+        if (lowerUnit === 'mcg' || lowerUnit === 'µg') return val / 1000000;
+        if (lowerUnit === 'kg') return val * 1000;
+        return val;
+    };
+
     const sortedNutrition = [...chartNutrition].sort((a, b) => {
-        return (processAmount(b.amount) || 0) - (processAmount(a.amount) || 0);
+        return getNormalizedValue(b.amount, b.unit) - getNormalizedValue(a.amount, a.unit);
     });
 
     const chartData = sortedNutrition.map(nut => ({
         id: nut.nutrient,
         label: `${nut.amount}${nut.unit}`,
-        value: processAmount(nut.amount) || 0,
+        value: getNormalizedValue(nut.amount, nut.unit),
         dailyValue: nut.percentDailyValue || '',
         unit: nut.unit
     }));
+
+    const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
     // Energy nutrient for display
     const energyNutrient = validNutrition.find(nut =>
@@ -76,35 +88,32 @@ export const NutritionChart = ({ nutritionalValues }: NutritionChartProps) => {
                 <div className="w-full md:w-2/3 h-[300px] md:h-full">
                     <ResponsivePie
                         data={chartData}
-                        margin={{
-                            top: 20,
-                            right: 20,
-                            bottom: 20,
-                            left: 20,
-                            ...(window.innerWidth > 768 && {
-                                top: 40,
-                                right: 80,
-                                bottom: 40,
-                                left: 80
-                            })
-                        }}
-                        innerRadius={0.3}
-                        padAngle={0.5}
+                        margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+                        innerRadius={0.5}
+                        padAngle={0.7}
                         cornerRadius={3}
+                        activeOuterRadiusOffset={8}
                         colors={colorPalette}
                         borderWidth={2}
                         borderColor={theme === 'dark' ? '#1f2937' : '#f3f4f6'}
-                        enableArcLinkLabels={window.innerWidth > 768}
+                        enableArcLinkLabels={true}
+                        arcLinkLabelsSkipAngle={10}
                         arcLinkLabelsColor={{ from: 'color', modifiers: [['darker', 1]] }}
                         arcLinkLabelsThickness={2}
-                        arcLinkLabelsTextColor={theme === 'dark' ? '#ffffff' : '#000000'}
-                        arcLabelsSkipAngle={10}
+                        arcLinkLabelsTextColor={theme === 'dark' ? '#ffffff' : '#a1a1aa'}
+                        arcLinkLabelsDiagonalLength={16}
+                        arcLinkLabelsStraightLength={24}
+                        arcLabelsSkipAngle={12}
                         arcLabelsTextColor="#ffffff"
-                        arcLabel="label"
+                        arcLabel={(d) => {
+                            const percent = (d.value / totalValue) * 100;
+                            if (percent < 1) return '<1%';
+                            return `~${Math.round(percent)}%`;
+                        }}
                         tooltip={({ datum }) => (
                             <div className="bg-white dark:bg-zinc-800 p-2 rounded-lg shadow-lg border dark:border-zinc-700">
                                 <span className="text-black dark:text-white font-medium">
-                                    {datum.id}: {datum.value}{datum.data.unit}
+                                    {datum.id}: {datum.data.label}
                                     {datum.data.dailyValue ? ` (${datum.data.dailyValue} DV)` : ''}
                                 </span>
                             </div>

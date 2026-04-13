@@ -61,7 +61,7 @@ const getExpiryStatus = (expiryDate: string) => {
 
     // Check if date is valid
     if (isNaN(expiry.getTime())) {
-        return { text: expiryDate, style: "bg-green-500/20 text-green-500" };
+        return { text: expiryDate, style: "bg-neutral-500/20 text-neutral-500" };
     }
 
     const now = new Date();

@@ -25,7 +25,7 @@ export const SignupFormPage = () => {
 
             <div className="w-full max-w-md lg:w-1/2 mx-auto rounded-2xl p-4 md:p-8">
                 <h2 className={`font-bold text-xl text-neutral-800 dark:text-neutral-200 mb-10 lg:hidden ${step === 2 ? 'hidden' : ''}`}>
-                    Sign up to PurePick
+                    Sign up to NutriLens
                 </h2>
 
                 {step === 1 && (

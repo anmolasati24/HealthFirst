@@ -49,7 +49,7 @@ const content = [
     description: (
       <>
         <p className="text-default-foreground">
-          Simply scan your product or upload images of its packaging. PurePick&apos;s advanced AI powered by Google Gemini instantly analyzes ingredients, nutritional values, and safety information to provide you with comprehensive insights about your products.
+          Simply scan your product or upload images of its packaging. NutriLens&apos;s advanced AI powered by Google Gemini instantly analyzes ingredients, nutritional values, and safety information to provide you with comprehensive insights about your products.
         </p>
         <p className="mt-4 text-default-foreground">
           Our technology combines multiple data sources including OpenFoodFacts, GoUPC, and regulatory databases to ensure you get the most accurate and reliable product information.
@@ -65,7 +65,7 @@ const content = [
     description: (
       <>
         <p className="text-default-foreground">
-          Get tailored product recommendations based on your age, health conditions, and dietary preferences. PurePick evaluates each product&apos;s suitability specifically for you, highlighting potential benefits and risks.
+          Get tailored product recommendations based on your age, health conditions, and dietary preferences. NutriLens evaluates each product&apos;s suitability specifically for you, highlighting potential benefits and risks.
         </p>
         <p className="mt-4 text-default-foreground">
           Our AI considers various age groups - from infants to seniors - ensuring products are safe and beneficial for everyone in your family.
@@ -96,7 +96,7 @@ const content = [
     description: (
       <>
         <p className="text-default-foreground">
-          Understand the environmental impact of your products. PurePick evaluates packaging materials, sustainability practices, and provides eco-friendly alternatives to help you make environmentally conscious decisions.
+          Understand the environmental impact of your products. NutriLens evaluates packaging materials, sustainability practices, and provides eco-friendly alternatives to help you make environmentally conscious decisions.
         </p>
       </>
     ),

@@ -44,7 +44,7 @@ export const TopRight = (productInsights: ProductInsights) => {
                 </CustomChip>
                 <CustomChip
                     variant="flat"
-                    className={`gap-1 pl-3 ${!productInsights?.productDetails?.nutrition?.dietaryInfo?.foodMark || productInsights?.productDetails?.nutrition?.dietaryInfo?.foodMark?.includes('non') ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'}`}
+                    className={`gap-1 pl-3 ${!productInsights?.productDetails?.nutrition?.dietaryInfo?.foodMark ? 'bg-neutral-500/20 text-neutral-500' : productInsights.productDetails.nutrition.dietaryInfo.foodMark.includes('non') ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'}`}
                     size="lg"
                     startContent={<VegIcon />}
                 >

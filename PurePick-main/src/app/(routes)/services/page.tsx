@@ -53,7 +53,7 @@ const services = [
     {
         icon: Zap,
         title: "Smart Alternatives",
-        description: "Never settle for unhealthy products. PurePick suggests better alternatives so you can make smarter purchasing decisions.",
+        description: "Never settle for unhealthy products. NutriLens suggests better alternatives so you can make smarter purchasing decisions.",
         features: ["Healthier substitutes", "Price comparison", "Side-by-side analysis", "Product comparison tool"],
         color: "from-indigo-500 to-violet-500",
         bg: "bg-indigo-500/10",
@@ -93,7 +93,7 @@ export default function ServicesPage() {
                             </span>
                         </h1>
                         <p className="text-lg dark:text-zinc-400 text-zinc-600 max-w-2xl mx-auto leading-relaxed">
-                            PurePick combines AI vision, real-time databases, and health science to give you the most comprehensive product analysis available — completely free.
+                            NutriLens combines AI vision, real-time databases, and health science to give you the most comprehensive product analysis available — completely free.
                         </p>
                     </motion.div>
                 </div>
@@ -155,7 +155,7 @@ export default function ServicesPage() {
                 <div className="p-10 rounded-3xl bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20">
                     <h2 className="text-3xl font-bold mb-4">Ready to scan your first product?</h2>
                     <p className="dark:text-zinc-400 text-zinc-600 mb-8">
-                        Join thousands of users making healthier choices with PurePick.
+                        Join thousands of users making healthier choices with NutriLens.
                     </p>
                     <Link href="/">
                         <button className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold hover:opacity-90 transition-opacity">

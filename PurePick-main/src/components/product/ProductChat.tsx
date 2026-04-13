@@ -40,7 +40,7 @@ export const ProductChat = ({ productId, productInsights, userDetails }: {
     const inputRef = useRef<HTMLInputElement>(null);
 
     // ✅ Build system prompt from product context
-    const systemPrompt = `You are PurePick AI, an advanced product analysis and health advisory system.
+    const systemPrompt = `You are NutriLens AI, an advanced product analysis and health advisory system.
 
 Your expertise covers product analysis, nutritional science, ingredient safety, and personalized health recommendations.
 
@@ -333,7 +333,7 @@ ${JSON.stringify(productInsights)}`;
                                         <div className="flex items-center gap-2 mb-2">
                                             {message.role === 'assistant' && <Slack className="w-5 h-5" />}
                                             <span className="text-xs opacity-70">
-                                                {message.role === 'assistant' ? 'PurePick AI' : 'You'}
+                                                {message.role === 'assistant' ? 'NutriLens AI' : 'You'}
                                             </span>
                                         </div>
                                         <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
@@ -446,7 +446,7 @@ ${JSON.stringify(productInsights)}`;
                         </Button>
                     </form>
                     <span className="text-xs text-muted-foreground w-full text-center p-0.5">
-                        PurePick AI can make mistakes.
+                        NutriLens AI can make mistakes.
                     </span>
                 </div>
             </div>
