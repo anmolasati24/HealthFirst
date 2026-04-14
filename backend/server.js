@@ -166,7 +166,7 @@ async function connectToMongoDB() {
 // KEEP ALIVE (Render free tier)
 // ─────────────────────────────────────────────
 if (process.env.NODE_ENV === "production") {
-  keepAlive("https://purepick-backend-b90b.onrender.com");
+ keepAlive("https://healthfirst-bwqe.onrender.com");
 }
 
 // ─────────────────────────────────────────────
