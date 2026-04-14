@@ -36,6 +36,10 @@ const userSchema = new Schema({
         required: true,
         enum: ['Google', 'Credentials']
     },
+    googleId: {
+    type: String,
+    sparse: true,
+},
     allergies: [String],
     diseases: [String],
     createdAt: {

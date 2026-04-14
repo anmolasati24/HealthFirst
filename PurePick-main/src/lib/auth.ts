@@ -83,6 +83,24 @@ export const authOptions: any = {
     })
   ],
   callbacks: {
+    async signIn({ user, account }: any) {
+    if (account.provider === "google") {
+      await connectDB();
+      let existingUser = await User.findOne({ email: user.email });
+      if (!existingUser) {
+        existingUser = await User.create({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          authType: "Google",
+          googleId: user.id,
+        });
+      }
+      // ✅ Replace Google ID with MongoDB _id
+      user.id = existingUser._id.toString();
+    }
+    return true;
+  },
     async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
