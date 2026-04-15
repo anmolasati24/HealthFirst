@@ -4,8 +4,9 @@ interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  age: number;
-  gender: string;
+  age?: number;
+  gender?: string;
+  googleId?: string;
   allergies: string[];
   diseases: string[];
   password?: string;
@@ -36,9 +37,13 @@ const userSchema: Schema<IUser> = new Schema({
     max: 120,
   },
   gender: {
-    required: true,
+    required: false,  // ✅ fixed
     type: String,
     enum: ['male', 'female', 'other'],
+  },
+  googleId: {
+    type: String,
+    sparse: true,
   },
   allergies: [String],
   diseases: [String],

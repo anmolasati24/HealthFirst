@@ -15,10 +15,9 @@ export const authOptions: any = {
           id: profile.sub,
           name: profile.name,
           firstName: profile.given_name,
-          lastName: profile.family_name,
+          lastName: profile.family_name || "",
           email: profile.email,
           image: profile.picture,
-          birthdate: profile.birthday
         };
       }
     }),
@@ -37,18 +36,10 @@ export const authOptions: any = {
       async authorize(credentials) {
         const { email, password, firstName, lastName, age, gender, otp, type } = credentials as any;
 
-        if (!email || !password) {
-          throw new Error("Missing required fields.");
-        }
+        if (!email || !password) throw new Error("Missing required fields.");
 
         await connectDB();
         const existingUser = await User.findOne({ email });
-
-        if (!existingUser && type === 'signup') {
-          if (!firstName || !lastName || !age || !gender || !email || !password || !otp || !type) {
-            throw new Error("Missing required fields.");
-          }
-        }
 
         if (existingUser && existingUser.authType === 'Google') {
           throw new Error("Incorrect authentication method. Please sign in with Google.");
@@ -61,20 +52,15 @@ export const authOptions: any = {
             throw new Error("Invalid credentials.");
           }
         } else if (type === 'signup') {
-          if (existingUser) {
-            throw new Error("User already exists.");
+          if (existingUser) throw new Error("User already exists.");
+          if (!firstName || !lastName || !age || !gender || !otp) {
+            throw new Error("Missing required fields.");
           }
-
           const newUser = await saveNewUser({
-            email,
-            password,
-            firstName,
-            lastName,
-            age: Number(age),
-            gender,
+            email, password, firstName,
+            lastName, age: Number(age), gender,
             authType: 'Credentials',
           });
-
           return newUser;
         } else {
           throw new Error("Invalid type.");
@@ -84,23 +70,23 @@ export const authOptions: any = {
   ],
   callbacks: {
     async signIn({ user, account }: any) {
-    if (account.provider === "google") {
-      await connectDB();
-      let existingUser = await User.findOne({ email: user.email });
-      if (!existingUser) {
-        existingUser = await User.create({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          authType: "Google",
-          googleId: user.id,
-        });
+      if (account.provider === "google") {
+        await connectDB();
+        let existingUser = await User.findOne({ email: user.email });
+        if (!existingUser) {
+          existingUser = await User.create({
+            firstName: user.firstName || user.name?.split(" ")[0] || "User",
+            lastName: user.lastName || user.name?.split(" ")[1] || "",
+            email: user.email,
+            authType: "Google",
+            googleId: user.id,
+            // ✅ gender and age intentionally omitted — optional for Google users
+          });
+        }
+        user.id = existingUser._id.toString();
       }
-      // ✅ Replace Google ID with MongoDB _id
-      user.id = existingUser._id.toString();
-    }
-    return true;
-  },
+      return true;
+    },
     async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
