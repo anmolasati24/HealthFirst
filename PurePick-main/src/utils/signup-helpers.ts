@@ -22,7 +22,7 @@ export const handleInputChange = (
 };
 
 export const handleGetOtp = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent<HTMLFormElement>,
 ) => {
     event.preventDefault();
     const { formData, setStep, setIsSendingOtp } = useAuthStore.getState();

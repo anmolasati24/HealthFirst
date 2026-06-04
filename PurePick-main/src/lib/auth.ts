@@ -41,21 +41,36 @@ export const authOptions: any = {
         await connectDB();
         const existingUser = await User.findOne({ email });
 
-        if (existingUser && existingUser.authType === 'Google') {
-          throw new Error("Incorrect authentication method. Please sign in with Google.");
-        }
-
         if (type === 'login') {
+          if (existingUser && existingUser.authType === 'Google' && !existingUser.password) {
+            throw new Error("Incorrect authentication method. Please sign in with Google.");
+          }
+
           if (existingUser && bcrypt.compareSync(password, existingUser.password)) {
             return existingUser;
           } else {
             throw new Error("Invalid credentials.");
           }
         } else if (type === 'signup') {
-          if (existingUser) throw new Error("User already exists.");
           if (!firstName || !lastName || !age || !gender || !otp) {
             throw new Error("Missing required fields.");
           }
+
+          if (existingUser) {
+            if (existingUser.password) {
+              throw new Error("User already exists. Please login.");
+            }
+
+            existingUser.password = await bcrypt.hash(password, 10);
+            existingUser.firstName = firstName;
+            existingUser.lastName = lastName;
+            existingUser.age = Number(age);
+            existingUser.gender = gender;
+            existingUser.authType = 'Credentials';
+            await existingUser.save();
+            return existingUser;
+          }
+
           const newUser = await saveNewUser({
             email, password, firstName,
             lastName, age: Number(age), gender,
@@ -80,7 +95,6 @@ export const authOptions: any = {
             email: user.email,
             authType: "Google",
             googleId: user.id,
-            // ✅ gender and age intentionally omitted — optional for Google users
           });
         }
         user.id = existingUser._id.toString();

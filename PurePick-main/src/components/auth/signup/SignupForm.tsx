@@ -14,7 +14,7 @@ import { OtpVerification } from "@/components/global/OtpVerification";
 import { LabelInputContainer } from "../LabelInputContainer";
 import { Label } from "../../ui/label";
 import { useAuthStore } from "@/zustand/useAuthStore";
-import { handleGetOtp, handleInputChange, handleSubmit } from "@/utils/signup-helpers";
+import { handleGetOtp, handleInputChange } from "@/utils/signup-helpers";
 
 export const SignupFormPage = () => {
     const { formData, step, isSendingOtp, signupFormValidation } = useAuthStore();
@@ -30,7 +30,7 @@ export const SignupFormPage = () => {
 
                 {step === 1 && (
                     <>
-                        <form className="my-4 grid gap-6" onSubmit={handleSubmit}>
+                        <form className="my-4 grid gap-6" onSubmit={handleGetOtp}>
                             <div className="grid grid-cols-2 gap-3">
                                 <LabelInputContainer>
                                     <Label className="pl-1" htmlFor="firstName">First Name</Label>

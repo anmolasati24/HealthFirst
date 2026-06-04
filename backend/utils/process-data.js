@@ -46,6 +46,39 @@ const parseIngredientsArray = (ingredients) => {
   }));
 };
 
+const startAmazonEnrichment = (productInsights, productType, productInsightId, socket) => {
+  setImmediate(async () => {
+    try {
+      console.log("[Alternatives] background enrichment queued:", String(productInsightId));
+
+      const enrichedInsights = await getAlternateProductDetails(productInsights, productType);
+      const alternatives = Array.isArray(enrichedInsights?.alternatives)
+        ? enrichedInsights.alternatives
+        : productInsights.alternatives || [];
+
+      await ProductInsight.findByIdAndUpdate(
+        productInsightId,
+        { $set: { alternatives } },
+        { new: false }
+      );
+
+      console.log("[Alternatives] background enrichment saved:", String(productInsightId));
+      socket?.emit("alternative-search", {
+        isSuccess: true,
+        productInsightId,
+        alternatives,
+      });
+    } catch (error) {
+      console.log("[Alternatives] background enrichment failed:", error.message);
+      socket?.emit("alternative-search", {
+        isSuccess: false,
+        productInsightId,
+        message: "Alternative enrichment failed",
+      });
+    }
+  });
+};
+
 const processData = async (data, socket, userId) => {
   try {
     console.log("🚀 processData started");
@@ -262,8 +295,7 @@ const processData = async (data, socket, userId) => {
     // 7. ALTERNATIVES + IMAGE UPLOAD IN PARALLEL
     // ─────────────────────────────────────────────
     console.log("🔄 Step 7: Alternatives + image upload...");
-    const [enrichedInsights, url1, url2] = await Promise.all([
-      getAlternateProductDetails(productInsights, productDetails.productType),
+    const [url1, url2] = await Promise.all([
       uploadImages(data[0].file),
       uploadImages(data[1].file),
     ]);
@@ -271,8 +303,7 @@ const processData = async (data, socket, userId) => {
     console.log("✅ url1:", url1);
     console.log("✅ url2:", url2);
 
-    productInsights = enrichedInsights;
-    socket.emit("alternative-search", { isSuccess: true });
+    socket.emit("alternative-search", { isSuccess: true, pending: true });
 
     // ─────────────────────────────────────────────
     // 8. FINAL PREP
@@ -308,6 +339,8 @@ const processData = async (data, socket, userId) => {
       isSuccess: true,
       productInsightId: saved._id,
     });
+
+    startAmazonEnrichment(productInsights, productDetails.productType, saved._id, socket);
 
   } catch (err) {
     console.error("❌ processData error:", err.message);

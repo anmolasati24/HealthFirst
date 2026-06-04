@@ -2,7 +2,7 @@
 'use client';
 import React from "react";
 import Link from "next/link";
-import { Facebook, Instagram, Github, Slack, Linkedin } from "lucide-react";
+import { Instagram, Github, Slack, Linkedin } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const XIcon = () => (
@@ -29,14 +29,6 @@ const Footer: React.FC = () => {
                         <Slack className="w-6 h-6" />
                         <span className="font-bold text-xl">NutriLens</span>
                     </div>
-                    <nav className="flex flex-wrap justify-center gap-4 text-gray-400">
-                        <Link href="/" className="hover:text-blue-600">Home</Link>
-                        <Link href="/about" className="hover:text-blue-600">About</Link>
-                        <Link href="/services" className="hover:text-blue-600">Services</Link>
-                        <Link href="/feedback" className="hover:text-blue-600">Feedback</Link>
-                        <Link href="/blog" className="hover:text-blue-600">Blog</Link>
-                        <Link href="/careers" className="hover:text-blue-600">Careers</Link>
-                    </nav>
                     <div className="flex gap-4 text-gray-400">
                         <Link href="https://www.linkedin.com/in/anmol-asati-bb3a62291/">
                             <Linkedin className="w-6 h-6 hover:text-gray-300" />

@@ -4,40 +4,41 @@ export const searchAmazonProduct = async (productName) => {
   try {
     if (!productName) return { success: false, product: null };
 
-    console.log("🔍 Amazon search for:", productName);
+    console.log("[Amazon] product lookup start:", productName);
 
-    const results = await fetchAmazon(productName);
+    const response = await fetchAmazon(productName);
+    const products = Array.isArray(response?.products) ? response.products : [];
 
-    console.log("📦 Amazon results type:", typeof results);
-    console.log("📦 Amazon results length:", results?.length);
+    console.log("[Amazon] product lookup parsed:", {
+      query: productName,
+      total_products: response?.total_products || 0,
+      products: products.length,
+    });
 
-    if (!results || results.length === 0) {
-      console.log("⚠️ Amazon: No results for:", productName);
+    if (products.length === 0) {
+      console.log("[Amazon] no products for:", productName);
       return { success: false, product: null };
     }
 
-    const product = results[0];
-    console.log("📦 Amazon product keys:", Object.keys(product || {}));
-
-    const title =
-      product.product_title || product.title || product.name || productName;
-
+    const product = products[0];
+    const title = product.product_title || product.title || product.name || productName;
     const imageUrl =
-      product.product_photo || product.product_image || product.image || product.thumbnail || "";
+      product.product_photo ||
+      product.product_image ||
+      product.image ||
+      product.thumbnail ||
+      "";
+    const productUrl = product.product_url || product.url || product.link || "";
+    const price = product.product_price || product.price || null;
 
-    const productUrl =
-      product.product_url || product.url || product.link || "";
-
-    const price =
-      product.product_price || product.price || null;
+    console.log("[Amazon] final selected product:", title);
 
     return {
       success: true,
       product: { title, imageUrl, productUrl, price },
     };
-
   } catch (error) {
-    console.log("❌ Amazon Search Error:", error.message);
+    console.log("[Amazon] product lookup failure:", error.message);
     return { success: false, product: null };
   }
 };

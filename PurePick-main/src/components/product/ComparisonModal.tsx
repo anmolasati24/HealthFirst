@@ -1,15 +1,14 @@
-// components/ComparisonModal.tsx
+"use client";
 
-import { AgeGroupKeys, ComparisonModalProps, ProductInsights } from "@/types/product.types";
+
+import { useState } from "react";
+import { AgeGroupKeys, Alternative, ComparisonModalProps, ProductInsights } from "@/types/product.types";
 import {
     Modal, ModalContent, ModalHeader, ModalBody,
     Select, SelectItem, Table, TableHeader, TableBody,
     TableColumn, TableRow, TableCell, Tabs, Tab, Chip
 } from "@nextui-org/react";
 
-// ==========================
-// ✅ RATING BAR
-// ==========================
 const RatingDisplay = ({ rating, max }: { rating: number; max: number }) => (
     <div className="flex items-center gap-2">
         <span className="text-lg font-semibold">{rating}</span>
@@ -22,9 +21,6 @@ const RatingDisplay = ({ rating, max }: { rating: number; max: number }) => (
     </div>
 );
 
-// ==========================
-// ✅ WIN/LOSE BADGE
-// ==========================
 const ComparisonBadge = ({ result }: { result: string }) => {
     const getStyle = () => {
         switch (result) {
@@ -40,9 +36,6 @@ const ComparisonBadge = ({ result }: { result: string }) => {
     );
 };
 
-// ==========================
-// ✅ SCORE CALCULATOR
-// ==========================
 const determineOverallWinner = (product1: ProductInsights, product2: ProductInsights) => {
     let score1 = 0;
     let score2 = 0;
@@ -73,10 +66,56 @@ const compareRatings = (current: number, other: number) => {
     return "Tie";
 };
 
-// ==========================
-// ✅ COMPARISON TABLE
-// Reusable - used for both scan history and alternatives
-// ==========================
+const toComparableAlternative = (
+    productInsights: ProductInsights,
+    alternative: Alternative,
+    index: number
+): ProductInsights => ({
+    ...productInsights,
+    _id: `alternative-${index}`,
+    productDetails: {
+        ...productInsights.productDetails,
+        productName: alternative.name,
+        brand: "AI Alternative",
+        description: alternative.health_advantages?.join(" ") || alternative.key_benefits?.join(" ") || "",
+        price: {
+            ...productInsights.productDetails.price,
+            amount: alternative.price_comparison || productInsights.productDetails.price.amount,
+        },
+    },
+    overall: {
+        ...productInsights.overall,
+        rating: alternative.rating,
+        reason: alternative.health_advantages?.join(" ") || alternative.key_benefits?.join(" ") || "AI suggested alternative",
+        key_factors: alternative.key_benefits || [],
+    },
+    eco_rating: {
+        ...productInsights.eco_rating,
+        rating: alternative.eco_score,
+        reason: `AI estimated eco score for ${alternative.name}`,
+    },
+    age_groups: Object.fromEntries(
+        Object.entries(productInsights.age_groups).map(([age, data]) => [
+            age,
+            {
+                ...data,
+                rating: alternative.rating,
+                reason: alternative.health_advantages?.join(" ") || data.reason,
+                cautions: [],
+            },
+        ])
+    ) as ProductInsights["age_groups"],
+    sources: alternative.link
+        ? [{
+            name: alternative.name,
+            sourceType: "AI Alternative",
+            link: alternative.link,
+            relevance: "Suggested product alternative",
+        }]
+        : productInsights.sources,
+    alternatives: [],
+});
+
 const ComparisonTable = ({
     productInsights,
     selectedProduct,
@@ -175,7 +214,6 @@ const ComparisonTable = ({
             </TableBody>
         </Table>
 
-        {/* Winner Banner */}
         <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-500/10 dark:to-purple-500/10 border border-indigo-100 dark:border-indigo-500/20">
             {(() => {
                 const { winner, score1, score2 } = determineOverallWinner(productInsights, selectedProduct);
@@ -213,10 +251,6 @@ const ComparisonTable = ({
     </>
 );
 
-// ==========================
-// ✅ ALTERNATIVE CARD
-// Shows alternative product info since alternatives are NOT full ProductInsight docs
-// ==========================
 const AlternativeCard = ({
     productInsights,
     alt,
@@ -225,7 +259,6 @@ const AlternativeCard = ({
     alt: any;
 }) => (
     <div className="mb-4 relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111113] p-5 shadow-sm transition-all hover:shadow-md group">
-        {/* Subtle glow if winner */}
         {alt.rating > productInsights.overall.rating && (
             <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-opacity group-hover:opacity-100 opacity-70" />
         )}
@@ -254,7 +287,6 @@ const AlternativeCard = ({
                             )}
                         </div>
                     </div>
-                    {/* Score */}
                     <div className="flex flex-col items-end">
                         <div className="flex items-baseline gap-1">
                             <span className="text-3xl font-black tracking-tighter text-indigo-500 dark:text-indigo-400">{alt.rating}</span>
@@ -267,7 +299,6 @@ const AlternativeCard = ({
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-                    {/* Progress Bars */}
                     <div className="flex flex-col justify-center space-y-5 rounded-xl bg-zinc-50/80 px-5 py-4 dark:bg-[#18181b]/80 border dark:border-zinc-800/50 border-zinc-100">
                         <div>
                             <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-zinc-500">
@@ -291,7 +322,6 @@ const AlternativeCard = ({
                         </div>
                     </div>
 
-                    {/* Features list */}
                     <div className="flex flex-col justify-center">
                         {alt.health_advantages?.length > 0 && (
                             <div>
@@ -315,21 +345,22 @@ const AlternativeCard = ({
     </div>
 );
 
-// ==========================
-// ✅ MAIN COMPARISON MODAL
-// ==========================
 export const ComparisonModal = ({
     isOpen,
     onClose,
-    products,           // user's scanned ProductInsight docs
-    productInsights,    // current product
+    products,
+    productInsights,
     selectedProductId,
     setSelectedProductId,
 }: ComparisonModalProps) => {
-    // Filter out the currently viewed product so users cannot compare a product with itself
-    const otherProducts = products.filter(p => p._id !== productInsights._id);
-    const selectedProduct = otherProducts.find(p => p._id === selectedProductId) || otherProducts[0];
-    const alternatives = productInsights.alternatives || []; // already saved in the product
+    const otherProducts = products.filter(p => String(p._id) !== String(productInsights._id));
+    const selectedProduct = otherProducts.find(p => String(p._id) === String(selectedProductId)) || otherProducts[0];
+    const alternatives = productInsights.alternatives || [];
+    const [selectedAlternativeIndex, setSelectedAlternativeIndex] = useState("0");
+    const selectedAlternative = alternatives[Number(selectedAlternativeIndex)] || alternatives[0];
+    const selectedAlternativeProduct = selectedAlternative
+        ? toComparableAlternative(productInsights, selectedAlternative, Number(selectedAlternativeIndex) || 0)
+        : null;
 
     return (
         <Modal
@@ -354,7 +385,6 @@ export const ComparisonModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    {/* ✅ TABS: Switch between "My Scans" and "Alternatives" */}
                     <Tabs
                         aria-label="Comparison type"
                         variant="underlined"
@@ -364,7 +394,6 @@ export const ComparisonModal = ({
                             tab: "text-zinc-400 data-[selected=true]:text-white",
                         }}
                     >
-                        {/* ===== TAB 1: Compare with AI-generated alternatives ===== */}
                         <Tab
                             key="alternatives"
                             title={
@@ -394,6 +423,36 @@ export const ComparisonModal = ({
                                         </span>{" "}
                                         suggested by AI
                                     </p>
+                                    <Select
+                                        label="Select an AI alternative to compare"
+                                        variant="bordered"
+                                        radius="lg"
+                                        className="mb-6"
+                                        selectedKeys={[selectedAlternativeIndex]}
+                                        classNames={{
+                                            trigger: "bg-gray-50 dark:bg-zinc-900/50 border-gray-200 dark:border-zinc-800",
+                                            value: "text-gray-700 dark:text-zinc-200",
+                                        }}
+                                        onChange={(e) => setSelectedAlternativeIndex(e.target.value)}
+                                    >
+                                        {alternatives.map((alt: Alternative, index: number) => (
+                                            <SelectItem
+                                                className="text-default-foreground"
+                                                key={String(index)}
+                                                value={String(index)}
+                                            >
+                                                {alt.name}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+
+                                    {selectedAlternativeProduct && (
+                                        <ComparisonTable
+                                            productInsights={productInsights}
+                                            selectedProduct={selectedAlternativeProduct}
+                                        />
+                                    )}
+
                                     {alternatives.map((alt: any, index: number) => (
                                         <AlternativeCard
                                             key={index}
@@ -405,7 +464,6 @@ export const ComparisonModal = ({
                             )}
                         </Tab>
 
-                        {/* ===== TAB 2: Compare with other scanned products ===== */}
                         <Tab
                             key="my-scans"
                             title={

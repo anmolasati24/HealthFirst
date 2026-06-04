@@ -172,6 +172,7 @@ const productInsightSchema = new Schema({
         health_advantages: [String],
         eco_score: Number,
         price_comparison: String,
+        price: String,
         imageUrl: String,
         link: String
     }],
