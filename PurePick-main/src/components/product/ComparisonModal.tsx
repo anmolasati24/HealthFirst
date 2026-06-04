@@ -101,7 +101,7 @@ const toComparableAlternative = (
                 ...data,
                 rating: alternative.rating,
                 reason: alternative.health_advantages?.join(" ") || data.reason,
-                cautions: [],
+                cautions: [] as string[],
             },
         ])
     ) as ProductInsights["age_groups"],
